@@ -72,23 +72,19 @@ public class StatsServiceImplTest {
 
     @Test
     void getUniqueStatsTest() {
-        when(statsRepository.findViewStatsUnique(startTimeStamp, endTimeStamp, uris)).
-                thenReturn(stats);
+        when(statsRepository.findViewStatsUnique(startTimeStamp, endTimeStamp, uris)).thenReturn(stats);
 
         statsService.getStats(startTimeStamp, endTimeStamp, uris, true);
 
-        verify(statsRepository, times(1))
-                .findViewStatsUnique(startTimeStamp, endTimeStamp, uris);
+        verify(statsRepository, times(1)).findViewStatsUnique(startTimeStamp, endTimeStamp, uris);
     }
 
     @Test
     void getStatsTest() {
-        when(statsRepository.findViewStats(startTimeStamp, endTimeStamp, uris)).
-                thenReturn(stats);
+        when(statsRepository.findViewStats(startTimeStamp, endTimeStamp, uris)).thenReturn(stats);
 
         statsService.getStats(startTimeStamp, endTimeStamp, uris, false);
 
-        verify(statsRepository, times(1))
-                .findViewStats(startTimeStamp, endTimeStamp, uris);
+        verify(statsRepository, times(1)).findViewStats(startTimeStamp, endTimeStamp, uris);
     }
 }
