@@ -1,7 +1,7 @@
 package ru.practicum.util;
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.exception.StatsServiceException;
+import ru.practicum.exception.DateTimeValidationException;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +16,7 @@ public class ValidationTest {
         LocalDateTime invalidStart = LocalDateTime.now().plusMinutes(10);
         LocalDateTime end = LocalDateTime.now();
 
-        assertThrows(StatsServiceException.class, () -> {
+        assertThrows(DateTimeValidationException.class, () -> {
             dateTimeValidation.validateDate(invalidStart, end);
         });
     }

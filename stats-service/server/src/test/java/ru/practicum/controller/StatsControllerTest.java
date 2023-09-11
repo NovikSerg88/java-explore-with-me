@@ -10,7 +10,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.service.StatsService;
-import ru.practicum.util.DateTimeValidation;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -34,9 +33,6 @@ public class StatsControllerTest {
 
     @MockBean
     StatsService statsService;
-
-    @MockBean
-    DateTimeValidation validation;
 
     @Autowired
     private MockMvc mvc;

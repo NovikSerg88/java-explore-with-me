@@ -11,7 +11,7 @@ import static ru.practicum.util.Constants.DATE_TIME_FORMAT;
 
 @Data
 @Builder
-public class EndpointHitDto {
+public final class EndpointHitDto {
     @NotBlank
     private final String app;
     @NotBlank

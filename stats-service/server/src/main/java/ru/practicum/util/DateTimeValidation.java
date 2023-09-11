@@ -1,7 +1,7 @@
 package ru.practicum.util;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.exception.StatsServiceException;
+import ru.practicum.exception.DateTimeValidationException;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +13,7 @@ public class DateTimeValidation {
             String msg = String.format("Invalid date parameters: %s, %s",
                     start.format(Constants.FORMATTER),
                     end.format(Constants.FORMATTER));
-            throw new StatsServiceException(msg);
+            throw new DateTimeValidationException(msg);
         }
     }
 }

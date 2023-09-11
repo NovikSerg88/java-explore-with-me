@@ -10,6 +10,7 @@ import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.mapper.StatsMapper;
 import ru.practicum.model.EndpointHit;
 import ru.practicum.repository.StatsRepository;
+import ru.practicum.util.DateTimeValidation;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,6 +27,9 @@ public class StatsServiceImplTest {
 
     @Mock
     StatsMapper statsMapper;
+
+    @Mock
+    DateTimeValidation validation;
 
     @InjectMocks
     StatsServiceImpl statsService;
@@ -72,6 +76,7 @@ public class StatsServiceImplTest {
 
     @Test
     void getUniqueStatsTest() {
+        doNothing().when(validation).validateDate(any(LocalDateTime.class), any(LocalDateTime.class));
         when(statsRepository.findViewStatsUnique(startTimeStamp, endTimeStamp, uris)).thenReturn(stats);
 
         statsService.getStats(startTimeStamp, endTimeStamp, uris, true);
@@ -81,6 +86,7 @@ public class StatsServiceImplTest {
 
     @Test
     void getStatsTest() {
+        doNothing().when(validation).validateDate(any(LocalDateTime.class), any(LocalDateTime.class));
         when(statsRepository.findViewStats(startTimeStamp, endTimeStamp, uris)).thenReturn(stats);
 
         statsService.getStats(startTimeStamp, endTimeStamp, uris, false);

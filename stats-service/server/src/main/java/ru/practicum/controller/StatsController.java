@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.service.StatsService;
-import ru.practicum.util.DateTimeValidation;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -21,7 +20,6 @@ import static ru.practicum.util.Constants.DATE_TIME_FORMAT;
 public class StatsController {
 
     private final StatsService statsService;
-    private final DateTimeValidation validator;
 
     @PostMapping("/hit")
     public void saveHit(@Valid @RequestBody EndpointHitDto endpointHitDto) {
@@ -35,7 +33,6 @@ public class StatsController {
                                        @RequestParam(value = "uris", required = false) List<String> uris,
                                        @RequestParam(value = "unique", defaultValue = "false") boolean unique) {
         log.info("Received request to GET statistics from start: {} to end: {} period", start, end);
-        validator.validateDate(start, end);
         return statsService.getStats(start, end, uris, unique);
     }
 }

@@ -7,6 +7,7 @@ import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.mapper.StatsMapper;
 import ru.practicum.repository.StatsRepository;
+import ru.practicum.util.DateTimeValidation;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,7 @@ public class StatsServiceImpl implements StatsService {
 
     private final StatsRepository statsRepository;
     private final StatsMapper statsMapper;
+    private final DateTimeValidation validator;
 
 
     @Override
@@ -28,6 +30,7 @@ public class StatsServiceImpl implements StatsService {
     @Override
     @Transactional(readOnly = true)
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        validator.validateDate(start, end);
         if (unique) {
             return statsRepository.findViewStatsUnique(start, end, uris);
         } else {
