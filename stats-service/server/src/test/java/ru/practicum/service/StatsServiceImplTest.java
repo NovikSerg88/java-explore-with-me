@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static ru.practicum.util.Constants.DATE_TIME_FORMAT;
+import static ru.practicum.util.Constants.FORMATTER;
 
 @ExtendWith(MockitoExtension.class)
 public class StatsServiceImplTest {
@@ -44,7 +45,7 @@ public class StatsServiceImplTest {
             .app("ewm-main-service")
             .uri("/events/1")
             .ip("192.168.1.1")
-            .timestamp("2020-05-05 00:00:00")
+            .timestamp(LocalDateTime.parse("2020-05-05 00:00:00", FORMATTER))
             .build();
 
     private final EndpointHit endpointHit = EndpointHit.builder()
@@ -79,7 +80,7 @@ public class StatsServiceImplTest {
         doNothing().when(validation).validateDate(any(LocalDateTime.class), any(LocalDateTime.class));
         when(statsRepository.findViewStatsUnique(startTimeStamp, endTimeStamp, uris)).thenReturn(stats);
 
-        statsService.getStats(startTimeStamp, endTimeStamp, uris, true);
+        statsService.getStats("2020-05-05 00:00:00", "2035-05-05 00:00:00", uris, true);
 
         verify(statsRepository, times(1)).findViewStatsUnique(startTimeStamp, endTimeStamp, uris);
     }
@@ -89,7 +90,7 @@ public class StatsServiceImplTest {
         doNothing().when(validation).validateDate(any(LocalDateTime.class), any(LocalDateTime.class));
         when(statsRepository.findViewStats(startTimeStamp, endTimeStamp, uris)).thenReturn(stats);
 
-        statsService.getStats(startTimeStamp, endTimeStamp, uris, false);
+        statsService.getStats("2020-05-05 00:00:00", "2035-05-05 00:00:00", uris, false);
 
         verify(statsRepository, times(1)).findViewStats(startTimeStamp, endTimeStamp, uris);
     }
