@@ -18,8 +18,6 @@ public interface EventsRepository extends JpaRepository<Event, Long> {
 
     Page<Event> findAllByInitiatorId(Long userId, Pageable pageable);
 
-    List<Event> findAllByIdIn(List<Long> ids);
-
     Optional<Event> findByIdAndInitiatorId(Long eventId, Long userId);
 
     Long countAllByIdIn(List<Long> ids);
@@ -49,5 +47,12 @@ public interface EventsRepository extends JpaRepository<Event, Long> {
             "AND (coalesce(:rangeEnd, null) is null or e.eventDate <= :rangeEnd)")
     List<Event> findEventsForAdmin(List<Long> users, List<EventState> states, List<Long> categories,
                                    LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable page);
+
+    @Query("select e from Event e " +
+            "JOIN FETCH e.initiator " +
+            "JOIN FETCH e.category " +
+            "JOIN fetch e.location " +
+            "WHERE e.id in :ids")
+    List<Event> findAllByIdIn(List<Long> ids);
 
 }

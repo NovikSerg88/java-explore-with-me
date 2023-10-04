@@ -3,6 +3,7 @@ package ru.practicum.ewm.compilations.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.compilations.dto.CompilationDto;
 import ru.practicum.ewm.compilations.dto.NewCompilationDto;
@@ -14,13 +15,14 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class AdminCompilationController {
 
     private final AdminCompilationService adminCompilationService;
 
     @PostMapping("/admin/compilations")
     @ResponseStatus(HttpStatus.CREATED)
-    CompilationDto createCompilation(@RequestBody @Valid NewCompilationDto newCompilationDto) {
+    public CompilationDto createCompilation(@RequestBody @Valid NewCompilationDto newCompilationDto) {
         log.info("Received POST request to create new compilation: {}", newCompilationDto);
         return adminCompilationService.createCompilation(newCompilationDto);
     }
