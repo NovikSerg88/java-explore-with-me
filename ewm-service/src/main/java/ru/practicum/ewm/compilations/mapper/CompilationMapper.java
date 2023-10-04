@@ -31,7 +31,7 @@ public class CompilationMapper {
     public Compilation mapToEntity(NewCompilationDto dto, List<Event> events) {
         return Compilation.builder()
                 .events(events)
-                .pinned(dto.isPinned())
+                .pinned(dto.getPinned())
                 .title(dto.getTitle())
                 .build();
     }

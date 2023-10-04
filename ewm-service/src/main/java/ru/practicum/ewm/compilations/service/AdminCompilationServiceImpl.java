@@ -25,13 +25,17 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
     @Override
     public CompilationDto createCompilation(NewCompilationDto dto) {
+        Compilation compilation = new Compilation();
         List<Event> events = getCompilationEvents(dto.getEvents());
-        Compilation compilation = compilationMapper.mapToEntity(dto, events);
-        Compilation saved = compilationRepository.save(compilation);
-        if (events != null && !events.isEmpty()) {
-            events.forEach(event -> event.setCompilation(compilation));
+        if (dto.getPinned() == null) {
+            compilation.setPinned(false);
+        } else {
+            compilation.setPinned(dto.getPinned());
         }
-        return compilationMapper.mapToDto(saved);
+        compilation.setTitle(dto.getTitle());
+        compilation.setEvents(events);
+        setCompilationToEvents(compilation, events);
+        return compilationMapper.mapToDto(compilationRepository.save(compilation));
     }
 
     @Override
@@ -59,7 +63,10 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
         }
         List<Event> events = update.getEvents() == null ? null : getCompilationEvents(update.getEvents());
-        compilation.setEvents(events);
+        if (events != null) {
+            compilation.setEvents(events);
+            events.forEach(event -> event.setCompilation(compilation));
+        }
         return compilationMapper.mapToDto(compilationRepository.save(compilation));
     }
 
@@ -76,6 +83,12 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         Long eventsCount = eventsRepository.countAllByIdIn(List.copyOf(eventIds));
         if (eventsCount != eventIds.size()) {
             throw new RequestValidationException("Events don`t exist");
+        }
+    }
+
+    private void setCompilationToEvents(Compilation compilation, List<Event> events) {
+        if (events != null && !events.isEmpty()) {
+            events.forEach(event -> event.setCompilation(compilation));
         }
     }
 }

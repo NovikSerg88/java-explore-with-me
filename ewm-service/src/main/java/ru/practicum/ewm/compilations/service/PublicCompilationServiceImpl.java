@@ -22,7 +22,7 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
     private final CompilationMapper compilationMapper;
 
     @Override
-    public List<CompilationDto> getCompilations(boolean pinned, int from, int size) {
+    public List<CompilationDto> getCompilations(Boolean pinned, int from, int size) {
         Pageable page = PageRequest.of(from / size, size);
         Page<Compilation> compilationsPage = compilationRepository.findAllByPinned(pinned, page);
         return compilationsPage.stream()

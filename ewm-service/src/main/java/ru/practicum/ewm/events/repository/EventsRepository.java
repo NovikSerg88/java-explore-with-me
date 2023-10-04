@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.model.Event;
 
@@ -12,13 +13,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface EventsRepository extends JpaRepository<Event, Long> {
 
     boolean existsByCategoryId(Long categoryId);
 
     Page<Event> findAllByInitiatorId(Long userId, Pageable pageable);
-
-    List<Event> findAllByIdIn(List<Long> ids);
 
     Optional<Event> findByIdAndInitiatorId(Long eventId, Long userId);
 
@@ -49,5 +49,12 @@ public interface EventsRepository extends JpaRepository<Event, Long> {
             "AND (coalesce(:rangeEnd, null) is null or e.eventDate <= :rangeEnd)")
     List<Event> findEventsForAdmin(List<Long> users, List<EventState> states, List<Long> categories,
                                    LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable page);
+
+    @Query("select e from Event e " +
+            "JOIN FETCH e.initiator " +
+            "JOIN FETCH e.category " +
+            "JOIN fetch e.location " +
+            "WHERE e.id in :ids")
+    List<Event> findAllByIdIn(List<Long> ids);
 
 }
