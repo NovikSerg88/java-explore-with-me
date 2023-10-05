@@ -34,6 +34,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         }
         compilation.setTitle(dto.getTitle());
         compilation.setEvents(events);
+        setCompilationToEvents(compilation, events);
         return compilationMapper.mapToDto(compilationRepository.save(compilation));
     }
 
@@ -62,7 +63,10 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
         }
         List<Event> events = update.getEvents() == null ? null : getCompilationEvents(update.getEvents());
-        compilation.setEvents(events);
+        if (events != null) {
+            compilation.setEvents(events);
+            events.forEach(event -> event.setCompilation(compilation));
+        }
         return compilationMapper.mapToDto(compilationRepository.save(compilation));
     }
 
@@ -79,6 +83,12 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         Long eventsCount = eventsRepository.countAllByIdIn(List.copyOf(eventIds));
         if (eventsCount != eventIds.size()) {
             throw new RequestValidationException("Events don`t exist");
+        }
+    }
+
+    private void setCompilationToEvents(Compilation compilation, List<Event> events) {
+        if (events != null && !events.isEmpty()) {
+            events.forEach(event -> event.setCompilation(compilation));
         }
     }
 }
