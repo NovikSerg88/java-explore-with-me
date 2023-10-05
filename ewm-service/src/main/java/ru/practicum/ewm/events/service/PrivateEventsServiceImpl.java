@@ -114,6 +114,7 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
             checkRequestStatus(request);
             if (eventFullDto.getConfirmedRequests() + 1 > event.getParticipantLimit()) {
                 request.setStatus(Status.CANCELED);
+                checkLimit(event, dto);
                 requestRepository.save(request);
                 rejectedRequests.add(requestMapper.mapToDto(request));
             }
