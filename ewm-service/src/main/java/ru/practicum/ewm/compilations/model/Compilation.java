@@ -20,12 +20,7 @@ public class Compilation {
     @Column(name = "id")
     private Long id;
     @ToString.Exclude
-    @ManyToMany
-    @JoinTable(
-            name = "events_compilations",
-            joinColumns = @JoinColumn(name = "compilation_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "compilation")
     private List<Event> events = new ArrayList<>();
     @Column(name = "pinned")
     private Boolean pinned;

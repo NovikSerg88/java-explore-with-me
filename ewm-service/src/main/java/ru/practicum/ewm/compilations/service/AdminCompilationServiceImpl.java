@@ -25,17 +25,16 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
     @Override
     public CompilationDto createCompilation(NewCompilationDto dto) {
-        List<Event> events = eventsRepository.findAllByIdIn(dto.getEvents());
         Compilation compilation = new Compilation();
-        compilation.setEvents(events);
+        List<Event> events = getCompilationEvents(dto.getEvents());
         if (dto.getPinned() == null) {
             compilation.setPinned(false);
         } else {
             compilation.setPinned(dto.getPinned());
         }
         compilation.setTitle(dto.getTitle());
-        compilation = compilationRepository.save(compilation);
-        return compilationMapper.mapToDto(compilation);
+        compilation.setEvents(events);
+        return compilationMapper.mapToDto(compilationRepository.save(compilation));
     }
 
     @Override
