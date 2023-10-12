@@ -8,9 +8,9 @@ import ru.practicum.ewm.categories.dto.NewCategoryDto;
 import ru.practicum.ewm.categories.mapper.CategoryMapper;
 import ru.practicum.ewm.categories.model.Category;
 import ru.practicum.ewm.categories.repository.CategoriesRepository;
-import ru.practicum.ewm.error.BadRequestException;
 import ru.practicum.ewm.error.DataIntegrityException;
 import ru.practicum.ewm.error.NotFoundException;
+import ru.practicum.ewm.error.RequestValidationException;
 import ru.practicum.ewm.events.repository.EventsRepository;
 
 @Service
@@ -34,7 +34,7 @@ public class AdminCategoriesServiceImpl implements AdminCategoriesService {
     @Override
     public CategoryDto updateCategory(Long catId, NewCategoryDto newCategoryDto) {
         Category category = categoriesRepository.findById(catId)
-                .orElseThrow(() -> new NotFoundException("Category not found with ID = " + catId));
+                .orElseThrow(() -> new NotFoundException(String.format("Category with ID = %s not found." + catId)));
         try {
             category.setName(newCategoryDto.getName());
             return categoryMapper.toDto(categoriesRepository.saveAndFlush(category));
@@ -46,10 +46,10 @@ public class AdminCategoriesServiceImpl implements AdminCategoriesService {
     @Override
     public void deleteCategory(Long catId) {
         Category category = categoriesRepository.findById(catId).orElseThrow(() ->
-                new NotFoundException(String.format("Category %s not found", catId)));
+                new NotFoundException(String.format("Category with ID = %s not found", catId)));
         boolean isExist = eventsRepository.existsByCategoryId(catId);
         if (isExist) {
-            throw new BadRequestException(String.format("Category %s isn't empty", catId));
+            throw new RequestValidationException(String.format("Category with ID = %s isn't empty", catId));
         } else {
             categoriesRepository.delete(category);
         }

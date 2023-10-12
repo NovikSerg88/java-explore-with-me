@@ -33,7 +33,7 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
     @Override
     public CompilationDto getCompilationById(Long compId) {
         Compilation compilation = compilationRepository.findById(compId)
-                .orElseThrow(() -> new NotFoundException(String.format("Compilation with ID = {} not found", compId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Compilation with ID = %s not found", compId)));
         return compilationMapper.mapToDto(compilation);
     }
 }

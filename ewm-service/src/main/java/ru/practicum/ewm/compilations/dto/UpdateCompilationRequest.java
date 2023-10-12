@@ -1,21 +1,28 @@
 package ru.practicum.ewm.compilations.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class UpdateCompilationRequest {
-    private List<Long> events = new ArrayList<>();
-    private Boolean pinned;
+public final class UpdateCompilationRequest {
+    private final List<Long> events = new ArrayList<>();
+    private final Boolean pinned;
     @Size(min = 1, max = 50)
-    private String title;
+    private final String title;
+
+    @JsonCreator
+    public UpdateCompilationRequest(@JsonProperty("pinned") Boolean pinned,
+                                    @JsonProperty("title") String title) {
+        this.pinned = pinned;
+        this.title = title;
+    }
 }

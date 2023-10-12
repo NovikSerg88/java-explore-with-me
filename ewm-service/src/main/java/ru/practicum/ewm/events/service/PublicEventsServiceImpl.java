@@ -76,12 +76,11 @@ public class PublicEventsServiceImpl implements PublicEventsService {
     public EventFullDto getEvent(Long id, HttpServletRequest request) {
         Event event = eventsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("Event with ID={} not found", id)));
+                        String.format("Event with ID = %s not found", id)));
         if (!event.getState().equals(EventState.PUBLISHED)) {
-            throw new NotFoundException(String.format("The event by ID = {} has not been published yet", id));
+            throw new NotFoundException(String.format("The event by ID = %s has not been published yet", id));
         }
         statsService.saveStats(serviceName, request.getRequestURI(), request.getRemoteAddr(), LocalDateTime.now());
-        EventFullDto eventFullDto = eventMapper.mapToEventFullDto(event);
-        return eventFullDto;
+        return eventMapper.mapToEventFullDto(event);
     }
 }

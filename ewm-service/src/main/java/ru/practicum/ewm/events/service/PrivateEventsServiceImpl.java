@@ -10,7 +10,13 @@ import ru.practicum.ewm.categories.repository.CategoriesRepository;
 import ru.practicum.ewm.error.NotFoundException;
 import ru.practicum.ewm.error.RequestValidationException;
 import ru.practicum.ewm.error.ValidationException;
-import ru.practicum.ewm.events.dto.*;
+import ru.practicum.ewm.events.dto.EventFullDto;
+import ru.practicum.ewm.events.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.ewm.events.dto.EventRequestStatusUpdateResult;
+import ru.practicum.ewm.events.dto.EventShortDto;
+import ru.practicum.ewm.events.dto.EventState;
+import ru.practicum.ewm.events.dto.NewEventDto;
+import ru.practicum.ewm.events.dto.UpdateEventUserRequest;
 import ru.practicum.ewm.events.mapper.EventMapper;
 import ru.practicum.ewm.events.model.Event;
 import ru.practicum.ewm.events.model.Location;
@@ -29,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 @RequiredArgsConstructor
 public class PrivateEventsServiceImpl implements PrivateEventsService {
@@ -47,9 +52,9 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
     public EventFullDto createEvent(NewEventDto dto, Long userId) {
         dateValidation.checkEventDate(dto.getEventDate());
         User initiator = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(
-                String.format("User with ID={} not found.", userId)));
+                String.format("User with ID = %s not found.", userId)));
         Category category = categoriesRepository.findById(dto.getCategory())
-                .orElseThrow(() -> new NotFoundException("Category not found with ID: " + dto.getCategory()));
+                .orElseThrow(() -> new NotFoundException("Category with ID = %s not found." + dto.getCategory()));
         Event event = eventMapper.mapToEvent(dto, category, initiator);
         return eventMapper.mapToEventFullDto(eventsRepository.save(event));
     }
@@ -68,7 +73,7 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
         checkUserExists(userId);
         Event event = eventsRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("Event with ID={} of user with ID={} not found", eventId, userId)));
+                        String.format("Event with ID = %s of user with ID = %s not found", eventId, userId)));
         return eventMapper.mapToEventFullDto(event);
     }
 
@@ -77,8 +82,8 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
         checkUserExists(userId);
         Event event = eventsRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("Event with ID={} not found", eventId)));
-        validateNewEventState(event, update);
+                        String.format("Event with ID = %s not found", eventId)));
+        validateNewEventState(event);
         Event updated = updateEvent(event, update);
         validateNewEventDate(updated);
         return eventMapper.mapToEventFullDto(eventsRepository.saveAndFlush(updated));
@@ -89,7 +94,7 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
         checkUserExists(userId);
         eventsRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("Event with ID={} not found", eventId)));
+                        String.format("Event with ID = %s not found", eventId)));
         List<ParticipationRequest> requests = requestRepository.findAllByEventIdAndEventInitiatorId(eventId, userId);
         return requests.stream()
                 .map(requestMapper::mapToDto)
@@ -103,7 +108,7 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
         checkUserExists(userId);
         Event event = eventsRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("Event with ID={} not found", eventId)));
+                        String.format("Event with ID = %s not found", eventId)));
         EventFullDto eventFullDto = eventMapper.mapToEventFullDto(event);
         checkLimit(event, dto);
         List<ParticipationRequest> requests = requestRepository.findAllByIdIn(dto.getRequestIds());
@@ -133,12 +138,12 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
     }
 
 
-    private User checkUserExists(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(
-                String.format("User with ID={} not found.", userId)));
+    private void checkUserExists(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(
+                String.format("User with ID = %s not found.", userId)));
     }
 
-    private void validateNewEventState(Event event, UpdateEventUserRequest update) {
+    private void validateNewEventState(Event event) {
         if (EventState.PUBLISHED.equals(event.getState())) {
             throw new RequestValidationException("Only events with the state PENDING or CANCELED are available for update.");
         }
@@ -157,7 +162,7 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
         if (update.getCategory() != null) {
             Category category = categoriesRepository.findById(update.getCategory())
                     .orElseThrow(() -> new NotFoundException(
-                            String.format("Category with ID={} not found.", update.getCategory())));
+                            String.format("Category with ID = %s not found.", update.getCategory())));
             event.setCategory(category);
         }
         if (update.getDescription() != null) {

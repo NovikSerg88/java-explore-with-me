@@ -1,25 +1,36 @@
 package ru.practicum.ewm.compilations.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import ru.practicum.ewm.events.dto.EventShortDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 @Builder
-public class CompilationDto {
-    private Long id;
+public final class CompilationDto {
+    private final Long id;
     @NotNull
-    private Boolean pinned;
+    private final Boolean pinned;
     @NotBlank
     @NotNull
-    private String title;
-    private List<EventShortDto> events;
+    private final String title;
+    private final List<EventShortDto> events;
+
+    @JsonCreator
+    public CompilationDto(@JsonProperty("id") Long id,
+                          @JsonProperty("pinned") Boolean pinned,
+                          @JsonProperty("title") String title,
+                          @JsonProperty("events") List<EventShortDto> events) {
+        this.id = id;
+        this.pinned = pinned;
+        this.title = title;
+        this.events = events;
+    }
 }

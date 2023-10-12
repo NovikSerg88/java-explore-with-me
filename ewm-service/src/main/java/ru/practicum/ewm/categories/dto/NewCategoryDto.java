@@ -1,19 +1,24 @@
 package ru.practicum.ewm.categories.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Data
+@Getter
+@Setter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class NewCategoryDto {
+public final class NewCategoryDto {
     @NotBlank
     @Size(min = 1, max = 50)
-    private String name;
+    private final String name;
+
+    @JsonCreator
+    public NewCategoryDto(@JsonProperty("name") String name) {
+        this.name = name;
+    }
 }

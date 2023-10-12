@@ -34,17 +34,6 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleBadRequestException(final BadRequestException e) {
-        return ApiError.builder()
-                .message(e.getMessage())
-                .reason("For the requested operation the conditions are not met.")
-                .status(HttpStatus.CONFLICT.toString())
-                .timestamp(LocalDateTime.now())
-                .build();
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleRequestValidationException(final RequestValidationException e) {
         return ApiError.builder()
                 .message(e.getMessage())
@@ -61,6 +50,28 @@ public class ErrorHandler {
                 .message(e.getMessage())
                 .reason("Incorrect request")
                 .status(HttpStatus.BAD_REQUEST.toString())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiError handleServiceException(final ServiceException e) {
+        return ApiError.builder()
+                .message(e.getMessage())
+                .reason("Failed to get statistics from Statistics Client.")
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.toString())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiError handleRuntimeException(final RuntimeException e) {
+        return ApiError.builder()
+                .message(e.getMessage())
+                .reason("Internal Server Error")
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.toString())
                 .timestamp(LocalDateTime.now())
                 .build();
     }

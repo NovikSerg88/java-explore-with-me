@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.practicum.client.StatsClient;
@@ -15,7 +14,8 @@ import ru.practicum.ewm.requests.model.ParticipationRequest;
 import ru.practicum.ewm.requests.repository.RequestRepository;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -26,10 +26,6 @@ public class StatsServiceImpl implements StatsService {
     private final StatsClient statsClient;
     private final ObjectMapper objectMapper;
     private final RequestRepository requestRepository;
-
-    @Value("${ewm.service.name}")
-    private String serviceName;
-
 
     @Override
     public List<ViewStatsDto> getStatistics(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {

@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.categories.mapper.CategoryMapper;
 import ru.practicum.ewm.categories.model.Category;
-import ru.practicum.ewm.events.dto.*;
+import ru.practicum.ewm.events.dto.EventFullDto;
+import ru.practicum.ewm.events.dto.EventShortDto;
+import ru.practicum.ewm.events.dto.EventState;
+import ru.practicum.ewm.events.dto.NewEventDto;
 import ru.practicum.ewm.events.model.Event;
 import ru.practicum.ewm.events.service.StatsService;
 import ru.practicum.ewm.users.mapper.UserMapper;
@@ -32,7 +35,7 @@ public class EventMapper {
                 .location(locationMapper.mapToLocation(dto.getLocation()))
                 .paid(dto.isPaid())
                 .participantLimit(dto.getParticipantLimit())
-                .requestModeration(dto.isRequestModeration())
+                .requestModeration(dto.getRequestModeration())
                 .title(dto.getTitle())
                 .state(EventState.PENDING)
                 .build();

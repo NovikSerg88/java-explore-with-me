@@ -50,12 +50,12 @@ public class AdminEventsServiceImpl implements AdminEventsService {
     public EventFullDto updateEvent(Long eventId, UpdateEventAdminRequest update) {
         Event event = eventsRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("Event with ID={} not found", eventId)));
+                        String.format("Event with ID = %s not found", eventId)));
 
         if (update.getStateAction() != null) {
             if (update.getStateAction().equals(AdminEventStateAction.PUBLISH_EVENT)) {
                 if (!event.getState().equals(EventState.PENDING)) {
-                    throw new RequestValidationException(String.format("Event %s has already been published", eventId));
+                    throw new RequestValidationException(String.format("Event wit ID = %s has already been published", eventId));
                 }
                 event.setState(EventState.PUBLISHED);
                 event.setPublishedOn(LocalDateTime.now());
@@ -80,7 +80,7 @@ public class AdminEventsServiceImpl implements AdminEventsService {
         }
         if (dto.getCategory() != null) {
             Category category = categoriesRepository.findById(dto.getCategory()).orElseThrow(() ->
-                    new NotFoundException(String.format("Category %s not found", dto.getCategory())));
+                    new NotFoundException(String.format("Category with ID = %s not found", dto.getCategory())));
             event.setCategory(category);
         }
         if (dto.getDescription() != null && !dto.getDescription().isBlank()) {

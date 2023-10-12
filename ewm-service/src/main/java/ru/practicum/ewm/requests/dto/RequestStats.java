@@ -1,15 +1,22 @@
 package ru.practicum.ewm.requests.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Builder
-public class RequestStats {
-    private Long eventId;
-    private Long confirmedRequests;
+public final class RequestStats {
+    private final Long eventId;
+    private final Long confirmedRequests;
+
+    @JsonCreator
+    public RequestStats(@JsonProperty("eventId") Long eventId,
+                        @JsonProperty("confirmedRequests") Long confirmedRequests) {
+        this.eventId = eventId;
+        this.confirmedRequests = confirmedRequests;
+    }
 }

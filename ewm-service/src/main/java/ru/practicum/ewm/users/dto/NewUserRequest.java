@@ -1,13 +1,17 @@
 package ru.practicum.ewm.users.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Data
+@Getter
+@Setter
 @Builder
 public final class NewUserRequest {
     @NotBlank
@@ -17,4 +21,11 @@ public final class NewUserRequest {
     @NotBlank
     @Size(min = 2, max = 250)
     private final String name;
+
+    @JsonCreator
+    public NewUserRequest(@JsonProperty("email") String email,
+                          @JsonProperty("name") String name) {
+        this.email = email;
+        this.name = name;
+    }
 }

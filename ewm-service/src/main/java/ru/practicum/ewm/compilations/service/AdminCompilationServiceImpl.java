@@ -13,7 +13,8 @@ import ru.practicum.ewm.error.RequestValidationException;
 import ru.practicum.ewm.events.model.Event;
 import ru.practicum.ewm.events.repository.EventsRepository;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +45,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
                 .ifPresentOrElse(
                         user -> compilationRepository.deleteById(compId),
                         () -> {
-                            throw new NotFoundException(String.format("Compilation with ID = {} not found", compId));
+                            throw new NotFoundException(String.format("Compilation with ID = %s not found", compId));
                         }
                 );
     }
@@ -53,7 +54,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     public CompilationDto updateCompilation(Long compId, UpdateCompilationRequest update) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> {
-                    throw new NotFoundException(String.format("Compilation with ID = {} not found", compId));
+                    throw new NotFoundException(String.format("Compilation with ID = %s not found", compId));
                 });
         if (update.getPinned() != null) {
             compilation.setPinned(update.getPinned());

@@ -55,7 +55,7 @@ public class AdminUserServiceImpl implements AdminUserService {
                 .ifPresentOrElse(
                         user -> userRepository.deleteById(userId),
                         () -> {
-                            throw new NotFoundException("User not found with ID: " + userId);
+                            throw new NotFoundException("User with ID = %s not found." + userId);
                         }
                 );
     }

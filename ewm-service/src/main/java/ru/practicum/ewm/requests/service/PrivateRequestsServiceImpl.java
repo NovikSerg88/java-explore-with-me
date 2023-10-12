@@ -26,7 +26,7 @@ public class PrivateRequestsServiceImpl implements PrivateRequestsService {
 
     @Override
     public List<ParticipationRequestDto> getRequests(Long userId) {
-        User requester = requestValidation.userValidate(userId);
+        requestValidation.userValidate(userId);
         List<ParticipationRequest> requests = requestRepository.findAllByRequester_Id(userId);
         return requests.stream()
                 .map(requestMapper::mapToDto)
@@ -56,9 +56,9 @@ public class PrivateRequestsServiceImpl implements PrivateRequestsService {
 
     @Override
     public ParticipationRequestDto cancelRequest(Long userId, Long requestId) {
-        User requester = requestValidation.userValidate(userId);
+        requestValidation.userValidate(userId);
         ParticipationRequest request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new NotFoundException(String.format("Request with ID = {} not found", requestId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Request with ID = %s not found", requestId)));
         request.setStatus(Status.CANCELED);
         request = requestRepository.save(request);
         return requestMapper.mapToDto(request);
