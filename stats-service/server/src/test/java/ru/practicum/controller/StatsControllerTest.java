@@ -13,7 +13,6 @@ import ru.practicum.service.StatsService;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -23,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.practicum.util.Constants.DATE_TIME_FORMAT;
+import static ru.practicum.util.Constants.FORMATTER;
 
 @WebMvcTest(controllers = StatsController.class)
 public class StatsControllerTest {
@@ -41,7 +40,7 @@ public class StatsControllerTest {
             .app("ewm-main-service")
             .uri("/events/1")
             .ip("ip")
-            .timestamp("2020-05-05 00:00:00")
+            .timestamp(LocalDateTime.parse("2020-05-05 00:00:00", FORMATTER))
             .build();
 
     private final ViewStatsDto viewStatsDto = ViewStatsDto.builder()
@@ -62,12 +61,7 @@ public class StatsControllerTest {
 
     @Test
     void getStatsTest() throws Exception {
-        LocalDateTime start = LocalDateTime.parse("2020-05-05 00:00:00",
-                DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
-        LocalDateTime end = LocalDateTime.parse("2035-05-05 00:00:00",
-                DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
-
-        when(statsService.getStats(start, end, null, false)).thenReturn(List.of(viewStatsDto));
+        when(statsService.getStats("2020-05-05 00:00:00", "2035-05-05 00:00:00", null, false)).thenReturn(List.of(viewStatsDto));
 
         mvc.perform(get("/stats")
                         .param("start", "2020-05-05 00:00:00")

@@ -9,9 +9,9 @@ import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static ru.practicum.util.Constants.DATE_TIME_FORMAT;
+import static ru.practicum.util.Constants.FORMATTER;
 
 public class StatsMapperTest {
-
     private final StatsMapper statsMapper = new StatsMapper();
 
     @Test
@@ -33,7 +33,7 @@ public class StatsMapperTest {
                 .app(app)
                 .ip(ip)
                 .uri(uri)
-                .timestamp("2020-05-05 00:00:00")
+                .timestamp(LocalDateTime.parse("2020-05-05 00:00:00", FORMATTER))
                 .build();
         EndpointHit actualHit = statsMapper.mapToEntity(requestHit);
         assertThat(actualHit.getApp()).isEqualTo(expectedHit.getApp());
@@ -41,4 +41,5 @@ public class StatsMapperTest {
         assertThat(actualHit.getUri()).isEqualTo(expectedHit.getUri());
         assertThat(actualHit.getTimestamp()).isEqualTo(expectedHit.getTimestamp());
     }
+
 }
