@@ -14,7 +14,7 @@ import static ru.practicum.util.Constants.DATE_TIME_FORMAT;
 @Setter
 @AllArgsConstructor
 @Builder
-public class ApiError {
+public class ApiErrorResponse {
     private String message;
     private String reason;
     private String status;

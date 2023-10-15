@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,7 +11,6 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
-@Setter
 @Builder
 public final class NewCompilationDto {
     private final List<Long> events;

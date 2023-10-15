@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import ru.practicum.ewm.events.dto.EventShortDto;
 
 import javax.validation.constraints.NotBlank;
@@ -12,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
-@Setter
 @Builder
 public final class CompilationDto {
     private final Long id;
