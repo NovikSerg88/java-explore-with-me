@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Size;
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 import static ru.practicum.util.Constants.DATE_TIME_FORMAT;
 
 @Getter
-@Setter
 @Builder
 public final class UpdateEventAdminRequest {
     @Size(min = 20, max = 2000)

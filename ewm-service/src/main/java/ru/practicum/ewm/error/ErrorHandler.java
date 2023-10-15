@@ -12,8 +12,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleUserAlreadyExistException(final DataIntegrityException e) {
-        return ApiError.builder()
+    public ApiErrorResponse handleUserAlreadyExistException(final DataIntegrityException e) {
+        return ApiErrorResponse.builder()
                 .message(e.getMessage())
                 .reason("Integrity constraint has been violated.")
                 .status(HttpStatus.CONFLICT.toString())
@@ -23,8 +23,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError handleUserNotFoundException(final NotFoundException e) {
-        return ApiError.builder()
+    public ApiErrorResponse handleUserNotFoundException(final NotFoundException e) {
+        return ApiErrorResponse.builder()
                 .message(e.getMessage())
                 .reason("The required object was not found.")
                 .status(HttpStatus.NOT_FOUND.toString())
@@ -34,8 +34,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleRequestValidationException(final RequestValidationException e) {
-        return ApiError.builder()
+    public ApiErrorResponse handleRequestValidationException(final RequestValidationException e) {
+        return ApiErrorResponse.builder()
                 .message(e.getMessage())
                 .reason("Integrity constraint has been violated.")
                 .status(HttpStatus.CONFLICT.toString())
@@ -45,8 +45,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleValidationException(final ValidationException e) {
-        return ApiError.builder()
+    public ApiErrorResponse handleValidationException(final ValidationException e) {
+        return ApiErrorResponse.builder()
                 .message(e.getMessage())
                 .reason("Incorrect request")
                 .status(HttpStatus.BAD_REQUEST.toString())
@@ -56,8 +56,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError handleServiceException(final ServiceException e) {
-        return ApiError.builder()
+    public ApiErrorResponse handleServiceException(final ServiceException e) {
+        return ApiErrorResponse.builder()
                 .message(e.getMessage())
                 .reason("Failed to get statistics from Statistics Client.")
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.toString())
@@ -67,8 +67,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError handleRuntimeException(final RuntimeException e) {
-        return ApiError.builder()
+    public ApiErrorResponse handleRuntimeException(final RuntimeException e) {
+        return ApiErrorResponse.builder()
                 .message(e.getMessage())
                 .reason("Internal Server Error")
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.toString())
